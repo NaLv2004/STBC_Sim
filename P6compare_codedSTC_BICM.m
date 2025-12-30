@@ -8,14 +8,14 @@ clear; clc; close all;
 
 %% 1. Simulation Configuration
 % =========================================================================
-sim_cfg.snr_db       = -4:1.0:1;          
+sim_cfg.snr_db       = -4:2.0:4;          
 sim_cfg.target_err   = 5000;             
 sim_cfg.max_blocks   = 50000;            
-sim_cfg.fading_type  = 'fast';          % 'fast' or 'slow'
+sim_cfg.fading_type  = 'slow';          % 'fast' or 'slow'
 sim_cfg.use_interleaver = true;        
 
 % Polar Code Info Lengths (K)
-polar_info_lens = [64]; 
+polar_info_lens = [128]; 
 
 % Target Spectral Efficiency (bits/channel use)
 % Setting to 0.8 so Alamouti is coded (Rate ~ 0.8) and SM is coded (Rate ~ 0.4)
@@ -112,11 +112,10 @@ function ber = run_alamouti_polar(snr_db, K, E, cfg)
     errs = 0; total_bits = 0; blocks = 0;
     L_list = 8;
     scale = sqrt(snr_lin/2); 
-
     while errs < cfg.target_err && blocks < cfg.max_blocks
         % --- TRANSMITTER ---
         data = randi([0 1], K, 1);
-        
+        H_slow = (randn(2,2)+1i*randn(2,2))/sqrt(2);
         % 1. Encode
         tx_codeword = nrPolarEncode(data, E);
         
@@ -160,7 +159,7 @@ function ber = run_alamouti_polar(snr_db, K, E, cfg)
             if strcmp(cfg.fading_type, 'slow')
                 % Quasi-static over the block? Usually Alamouti assumes static over 2 slots
                 % Here we generate one H per pair to be safe with 'fast' fading logic
-                H = (randn(2,2)+1i*randn(2,2))/sqrt(2);
+                H = H_slow;
             else
                 H = (randn(2,2)+1i*randn(2,2))/sqrt(2);
             end

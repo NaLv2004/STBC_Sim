@@ -14,7 +14,7 @@ fprintf('Running Part 1: Fair SER comparison (Rate = 2 bits/s/Hz)...\n');
 
 SNR_dB_vec = 0:2:12;
 SNR_lin_vec = 10.^(SNR_dB_vec./10);
-num_trials = 20000; 
+num_trials = 100000; 
 
 % --- Constellations (Unit Energy) ---
 qpsk_syms = [1+1i, 1-1i, -1+1i, -1-1i] / sqrt(2); 
@@ -131,16 +131,13 @@ d_theory = 4 * (1 - r_vals);
 %% PLOTTING
 %% =========================================================================
 
-figure('Position', [100, 100, 1000, 500]);
-
-% Plot 1: SER
-subplot(1, 2, 1);
+figure;
 semilogy(SNR_dB_vec, ser_sm, 'b-o', 'LineWidth', 2); hold on;
 semilogy(SNR_dB_vec, ser_ala, 'r-s', 'LineWidth', 2);
 grid on;
 xlabel('SNR (dB)');
 ylabel('Symbol Error Rate (SER)');
-title({'Fair Comparison (Rate = 2 bits/s/Hz)', 'Alamouti(QPSK) vs SM(BPSK)'});
+%title({'BER Comparison of Alamouti & SM (Rate = 2 bits/s/Hz)', 'Alamouti(QPSK) vs SM(BPSK)'});
 legend('2x2 SM (BPSK)', '2x2 Alamouti (QPSK)', 'Location', 'SouthWest');
 
 % % Plot 2: DMT

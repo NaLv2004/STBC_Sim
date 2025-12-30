@@ -17,7 +17,7 @@ SNR_dB = -2:2:12;            % SNR range in dB
 SNR_lin = 10.^(SNR_dB./10); 
 
 % Termination Criteria
-target_errors = 100;        % Stop after collecting this many errors
+target_errors = 1000;        % Stop after collecting this many errors
 max_bits = 1e7;             % Hard limit
 print_interval = 1000;      % Print status every 1000 bits
 
